@@ -32,7 +32,7 @@ jobs:
           release_name="DataProtectionCrypto-$tag-${{ matrix.target }}"
 
           # Build everything
-          dotnet publish src/DataProtectionCrypto/DataProtectionCrypto.csproj -c Release -o "$release_name" -r "${{ matrix.target }}" --no-self-contained /p:PublishSingleFile=true
+          dotnet publish src/DataProtectionCrypto/DataProtectionCrypto.csproj -c Release -o "$release_name" -r "${{ matrix.target }}" --no-self-contained
 
           # Pack files
           7z a -tzip "${release_name}.zip" "./${release_name}/*"
