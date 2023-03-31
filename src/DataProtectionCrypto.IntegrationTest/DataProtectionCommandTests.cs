@@ -13,6 +13,18 @@ public class DataProtectionCommandTests
     private static string KeyPath => Path.Combine(CurrentDirectory, "TestData", "Keys");
 
     #endregion
+
+    [Test]
+    public void EncryptFailWithShortKeyLifeTime()
+    {
+        var command = new DataProtectionCommand();
+
+        const string sensitiveData = ":P";
+        
+        var protectedData = command.Encrypt(sensitiveData, "Service", "Application", KeyPath, 1);
+        
+        Assert.That(protectedData, Is.Null);
+    }
     
     [Test]
     public void EncryptSuccess()

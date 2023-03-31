@@ -17,13 +17,22 @@ public class DataProtectionCommand : ConsoleAppBase
         [Option("kp", "Key path.")] string keyPath = DefaultKeyPath,
         [Option("kt", "Key lifetime.")] int keyLifetime = DefaultKeyLifetime)
     {
-        var protectedData = GetDataProtectionProvider(appName, keyPath, keyLifetime)
-            .CreateProtector(svcName)
-            .Protect(data);
+        try
+        {
+            var protectedData = GetDataProtectionProvider(appName, keyPath, keyLifetime)
+                .CreateProtector(svcName)
+                .Protect(data);
 
-        Console.WriteLine(protectedData);
+            Console.WriteLine(protectedData);
 
-        return protectedData;
+            return protectedData;
+        }
+        catch (ArgumentOutOfRangeException ex)
+        {
+            Console.WriteLine($"Encrypt fail! {ex.Message}");
+        }
+        
+        return null;
     }
     
     [Command("decrypt", "Decrypt with data protection.")]
@@ -46,9 +55,9 @@ public class DataProtectionCommand : ConsoleAppBase
         catch (Exception)
         {
             Console.WriteLine("Decrypt fail! Please check your inputs is correct.");
-            
-            return null;
         }
+        
+        return null;
     }
 
     private IDataProtectionProvider GetDataProtectionProvider(string appName, string keyPath, int? keyLifetime = null)
